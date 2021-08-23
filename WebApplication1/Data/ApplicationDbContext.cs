@@ -12,12 +12,10 @@ namespace WebApplication1.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        //public DbSet<Admin> Admins { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<JobVacancy> JobVacancies { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
-        //public DbSet<VacancyAudit> VacancyAudits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

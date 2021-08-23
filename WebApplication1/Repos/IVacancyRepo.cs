@@ -11,6 +11,7 @@ namespace WebApplication1.Repos
     {
         Task<bool> PostVacancy(Vacancy vacancy);
         Task<bool> IsVacancy(string title);
+        Task<int> IsVacancy(int id);
         Task<bool> IsValidate(VacancyDto vacancyDto);
         void AddAssociates(ref Vacancy vacancy, AppUser user);
         Task<ICollection<Vacancy>> GetVacancies(AppUser user);

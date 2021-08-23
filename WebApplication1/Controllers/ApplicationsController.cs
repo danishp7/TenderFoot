@@ -22,13 +22,18 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger _logger;
         private readonly UserManager<AppUser> _user;
+        private readonly SignInManager<AppUser> _signInUser;
         private readonly IApplicationRepo _repo;
-        public ApplicationsController(ILogger<ApplicationsController> logger, UserManager<AppUser> userManager,
-                                      IApplicationRepo applicationRepo)
+        private readonly IVacancyRepo _vacancyRepo;
+
+        public ApplicationsController(ILogger<ApplicationsController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+                                      IApplicationRepo applicationRepo, IVacancyRepo vacancyRepo)
         {
             _logger = logger;
             _user = userManager;
+            _signInUser = signInManager;
             _repo = applicationRepo;
+            _vacancyRepo = vacancyRepo;
         }
 
         // POST // api/applications/
@@ -52,7 +57,7 @@ namespace WebApplication1.Controllers
                 }
 
                 // check if that vacancy exist or not
-                var vacancyId = await _repo.IsVacancy(id);
+                var vacancyId = await _vacancyRepo.IsVacancy(id);
                 if (vacancyId == 0)
                 {
                     _logger.LogWarning("no such vacancy exist with id: " + id);
@@ -69,10 +74,17 @@ namespace WebApplication1.Controllers
                     return BadRequest("you have already applied for this vacancy...");
                 }
 
-                // first check if user is authenticated (logged in) or not
-                if (!User.Identity.IsAuthenticated)
+                // if user logged in or not
+                if (!_signInUser.IsSignedIn(User))
                 {
                     _logger.LogWarning("user is not logged in...");
+                    return Unauthorized("Please signed in to your account.");
+                }
+
+                // first check if user is authenticated or not
+                if (!User.Identity.IsAuthenticated)
+                {
+                    _logger.LogWarning("user is not authenticated...");
                     return Unauthorized("Please signed in to your account.");
                 }
 

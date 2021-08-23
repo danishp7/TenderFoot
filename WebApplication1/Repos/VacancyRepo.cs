@@ -139,5 +139,26 @@ namespace WebApplication1.Repos
                 return null;
             }
         }
+
+        public async Task<int> IsVacancy(int id)
+        {
+            try
+            {
+                var result = await _ctx.Vacancies.FindAsync(id);
+                if (result == null)
+                {
+                    _logger.LogWarning("no vacancy exist with id: " + id);
+                    return 0;
+                }
+
+                _logger.LogWarning("vacancy exist with id: " + id);
+                return result.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return 0;
+            }
+        }
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Dtos;
+using WebApplication1.Models;
 
 namespace WebApplication1.Repos
 {
     public interface IJobApplicationRepo
     {
+        Task<ICollection<JobApplication>> GetAllApplications(int id);
     }
 }

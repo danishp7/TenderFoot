@@ -26,7 +26,7 @@ namespace WebApplication1.Repos
         {
             _ctx = context;
             _logger = logger;
-            this._config = configuration;
+            _config = configuration;
             _appOptions = options.Value;
         }
 
@@ -60,27 +60,6 @@ namespace WebApplication1.Repos
                 _logger.LogError(ex.Message);
                 return null;
             }
-        }
-
-        public async Task<int> IsVacancy(int id)
-        {
-			try
-			{
-                var result = await _ctx.Vacancies.FindAsync(id);
-                if (result == null)
-                {
-                    _logger.LogWarning("no vacancy exist with id: " + id);
-                    return 0;
-                }
-
-                _logger.LogWarning("vacancy exist with id: " + id);
-                return result.Id;
-			}
-			catch (Exception ex)
-			{
-                _logger.LogError(ex.Message);
-                return 0;
-			}
         }
 
         public async Task<bool> SaveApplication(ApplicationDto applicationDto, AppUser user, int vacancyId)

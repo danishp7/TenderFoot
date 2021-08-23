@@ -26,12 +26,14 @@ namespace WebApplication1.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _user;
-        public VacanciesController(ILogger<VacanciesController> logger, IMapper mapper, UserManager<AppUser> userManager, IVacancyRepo vacancyRepo)
+        private readonly SignInManager<AppUser> _signInUser;
+        public VacanciesController(ILogger<VacanciesController> logger, IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IVacancyRepo vacancyRepo)
         {
             _repo = vacancyRepo;
             _logger = logger;
             _mapper = mapper;
             _user = userManager;
+            this._signInUser = signInManager;
         }
 
 
@@ -48,10 +50,17 @@ namespace WebApplication1.Controllers
                     return BadRequest("something wrong with the request...");
                 }
 
-                // first check if user is authenticated (logged in) or not
-                if (!User.Identity.IsAuthenticated)
+                // if user logged in or not
+                if (!_signInUser.IsSignedIn(User))
                 {
                     _logger.LogWarning("user is not logged in...");
+                    return Unauthorized("Please signed in to your account.");
+                }
+
+                // first check if user is authenticated or not
+                if (!User.Identity.IsAuthenticated)
+                {
+                    _logger.LogWarning("user is not authenticated...");
                     return Unauthorized("Please signed in to your account.");
                 }
 
@@ -118,11 +127,18 @@ namespace WebApplication1.Controllers
                     return BadRequest("something wrong with the request...");
                 }
 
-                // first check if user is authenticated (logged in) or not
-                if (!User.Identity.IsAuthenticated)
+                // if user logged in or not
+                if (!_signInUser.IsSignedIn(User))
                 {
                     _logger.LogWarning("user is not logged in...");
-                    return BadRequest("Please signed in to your account.");
+                    return Unauthorized("Please signed in to your account.");
+                }
+
+                // first check if user is authenticated or not
+                if (!User.Identity.IsAuthenticated)
+                {
+                    _logger.LogWarning("user is not authenticated...");
+                    return Unauthorized("Please signed in to your account.");
                 }
 
                 // check if user is in role
