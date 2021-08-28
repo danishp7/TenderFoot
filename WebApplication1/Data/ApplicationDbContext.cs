@@ -38,7 +38,7 @@ namespace WebApplication1.Data
                 .OnDelete(DeleteBehavior.Cascade);
             #endregion admin and vacancy many to many relationship
 
-            #region appuser and vacancy many to many relationship
+            #region appuser and applications many to many relationship
             builder.Entity<JobApplication>()
                 .HasKey(k => new { k.AppUserId, k.VacancyId });
 
@@ -53,7 +53,7 @@ namespace WebApplication1.Data
                 .WithMany(ap => ap.JobApplications)
                 .HasForeignKey(fk => fk.VacancyId)
                 .OnDelete(DeleteBehavior.Restrict);
-            #endregion appuser and vacancy many to many relationship
+            #endregion appuser and applications many to many relationship
 
         }
     }

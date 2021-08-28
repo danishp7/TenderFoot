@@ -15,7 +15,7 @@ using WebApplication1.Repos;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "AppUser")]
     [Route("api/[controller]")]
     [ApiController]
     public class JobApplicationsController : ControllerBase
@@ -74,11 +74,11 @@ namespace WebApplication1.Controllers
                 }
 
                 // check if user is in role
-                if (!User.IsInRole(Role.Admin.ToString()))
-                {
-                    _logger.LogWarning("user is not in employer role to post vacancy");
-                    return Unauthorized("You do not have privilege to process this request");
-                }
+                //if (!User.IsInRole(Role.Admin.ToString()))
+                //{
+                //    _logger.LogWarning("user is not in employer role to post vacancy");
+                //    return Unauthorized("You do not have privilege to process this request");
+                //}
 
                 // get applications against given id
                 var apps = await _repo.GetAllApplications(vacancyId);
@@ -87,8 +87,8 @@ namespace WebApplication1.Controllers
                     _logger.LogWarning("no application received for vacancy: " + vacancyId);
                     return Ok(null);
                 }
-
-                return Ok(_mapper.Map<ICollection<JobApplication>, ICollection<JobApplicationDto>>(apps));
+                var applications = _mapper.Map<ICollection<JobApplication>, ICollection<JobApplicationDto>>(apps);
+                return Ok(applications);
             }
             catch (Exception ex)
             {

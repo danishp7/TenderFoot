@@ -107,8 +107,6 @@ namespace WebApplication1.Controllers
                 if (user == null)
                     return BadRequest("No such user exist, please signup!");
 
-                // first check if user is authenticated (logged in) or not
-                
                 if (_signInUser.IsSignedIn(User))
                 {
                     _logger.LogInformation("user is already logged in...");
@@ -123,11 +121,12 @@ namespace WebApplication1.Controllers
                 }
 
                 var isCustomPassword = await _encryptRepo.IsPassword(userDto.Password, user.HashPassword, user.Key);
-                if (isPassword == false)
+                if (isCustomPassword == false)
                 {
                     _logger.LogWarning("Incorrect UserName or custom Password.");
                     return BadRequest("Incorrect UserName or Password.");
                 }
+
                 var isLogin = await _signInUser.PasswordSignInAsync(userDto.Email, userDto.Password, false, false);
                 if (isLogin.Succeeded)
                 {

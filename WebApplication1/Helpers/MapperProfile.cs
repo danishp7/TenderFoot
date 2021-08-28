@@ -14,7 +14,9 @@ namespace WebApplication1.Helpers
         {
             CreateMap<UserDto, AppUser>().ReverseMap();
             CreateMap<VacancyDto, Vacancy>().ReverseMap();
-            CreateMap<JobApplicationDto, JobApplication>().ReverseMap();
+            CreateMap<JobApplication, JobApplicationDto>()
+                .ForPath(m => m.UserName, dst => dst.MapFrom(_ => _.AppUser.Email))
+                .ReverseMap();
         }
     }
 }

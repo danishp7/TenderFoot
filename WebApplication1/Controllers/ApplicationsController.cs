@@ -108,7 +108,7 @@ namespace WebApplication1.Controllers
                 }
                 
                 // save the application
-                if (!await _repo.SaveApplication(applicationDto, user, (int)vacancyId))
+                if (!await _repo.SaveApplication(applicationDto, user, vacancyId))
                 {
                     _logger.LogWarning("application cannot be saved successfully into db...");
                     return BadRequest("something went wrong while saving the application");

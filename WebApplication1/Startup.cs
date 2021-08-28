@@ -84,6 +84,7 @@ namespace WebApplication1
             services.AddScoped<IVacancyRepo, VacancyRepo>();
             services.AddScoped<IEncryptRepo, EncryptRepo>();
             services.AddScoped<IApplicationRepo, ApplicationRepo>();
+            services.AddScoped<IJobApplicationRepo, JobApplicationRepo>();
             services.AddTransient<SeedData>();
 
             // add application settings service

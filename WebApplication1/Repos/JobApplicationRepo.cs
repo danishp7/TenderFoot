@@ -14,7 +14,7 @@ namespace WebApplication1.Repos
     {
         private readonly ApplicationDbContext _ctx;
         private readonly ILogger _logger;
-        public JobApplicationRepo(ApplicationDbContext context, ILogger<ApplicationRepo> logger)
+        public JobApplicationRepo(ApplicationDbContext context, ILogger<JobApplicationRepo> logger)
         {
             _ctx = context;
             _logger = logger;
@@ -23,7 +23,7 @@ namespace WebApplication1.Repos
         {
             try
             {
-                var applications = await _ctx.JobApplications.Where(_ => _.VacancyId == id).ToListAsync();
+                var applications = await _ctx.JobApplications.Where(_ => _.VacancyId == id).Include(user => user.AppUser).ToListAsync();
                 if (applications == null)
                 {
                     _logger.LogWarning("no applications received for vacancy: " + id);

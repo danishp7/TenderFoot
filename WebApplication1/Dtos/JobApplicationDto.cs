@@ -7,6 +7,7 @@ namespace WebApplication1.Dtos
 {
     public class JobApplicationDto
     {
+        public string UserName { get; set; }
         public string Status { get; set; }
         public string Resume { get; set; }
         public string CoverLetter { get; set; }
